@@ -46,8 +46,11 @@ def synthesize_research(question, research_data):
     Today's date is {today}.
 
     CRITICAL OUTPUT INSTRUCTIONS:
-    You MUST generate a highly detailed, comprehensive investment report. You are strictly required to use the exact template below. Highlight each main point in bold. Do NOT skip any sections. If specific qualitative data is not in the raw data, deduce reasonable assumptions based on the industry news or state that it is undisclosed, but you MUST address the header.
-
+    CRITICAL OUTPUT INSTRUCTIONS:
+    You MUST generate a highly detailed, comprehensive investment report. 
+    You are strictly required to output the exact template below EXACTLY ONCE. 
+    DO NOT repeat the template. If you are comparing multiple companies, integrate their data together under each single header (e.g., "Amazon: X | Apple: Y"). 
+    Highlight each main point in bold. Do NOT skip any sections.
     MANDATORY REPORT TEMPLATE:
 
     ### 🏢 1. Company Overview & History
