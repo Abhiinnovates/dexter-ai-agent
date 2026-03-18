@@ -1,6 +1,12 @@
 from groq import Groq
 
-client = Groq(api_key="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")
+# 1. Load the secret key from the .env file instead of hardcoding it!
+load_dotenv()
+groq_api_key = os.environ.get("GROQ_API_KEY")
+
+if not groq_api_key:
+    raise ValueError(
+        "CRITICAL: GROQ_API_KEY is missing. Please set it in your .env file."
 
 
 def validate_research(question, data):
