@@ -1,0 +1,7 @@
+streamlit
+langgraph
+groq
+python-dotenv
+pandas
+yfinance
+duckduckgo-search>=6.0.0
