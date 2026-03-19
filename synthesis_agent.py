@@ -97,7 +97,7 @@ def synthesize_research(state: dict):
     Write the SINGLE comprehensive report now:
     """
 
-try:
+    try:
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
