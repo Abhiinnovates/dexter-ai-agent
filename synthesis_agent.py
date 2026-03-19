@@ -16,7 +16,6 @@ if not groq_api_key:
 # Initialize the Groq Client
 client = Groq(api_key=groq_api_key)
 
-
 def clean_data_for_llm(data):
     """Recursively removes massive arrays to keep the prompt clean and focused."""
     if isinstance(data, dict):
@@ -33,15 +32,21 @@ def clean_data_for_llm(data):
     else:
         return data
 
-
-def synthesize_research(question, research_data):
+def synthesize_research(state: dict):
     # 2. THE ACTUAL FUNCTION (Runs only when the data is ready)
+    print("--- SYNTHESIZING REPORT ---")
+    
+    # Extract data from LangGraph state safely
+    question = state.get("question", "")
+    research_data = state.get("research_data", [])
+    
     today = datetime.now().strftime("%B %d, %Y")
 
+    # Clean the data using your custom function before giving it to the LLM
     llm_safe_data = clean_data_for_llm(research_data)
     compressed_data_string = json.dumps(llm_safe_data, default=str, indent=2)
 
-   prompt = f"""
+    prompt = f"""
     You are an elite, Wall Street quantitative financial analyst and AI research agent. 
     Today's date is {today}.
 
@@ -102,10 +107,13 @@ def synthesize_research(question, research_data):
                 },
                 {"role": "user", "content": prompt},
             ],
-            temperature=0.3, # Lowered temperature so it is less creative and more rule-following!
+            temperature=0.3, 
         )
-        # Return the generated text back to your app
-        return response.choices[0].message.content
+        
+        # Return the generated text securely back to LangGraph's memory
+        report = response.choices[0].message.content
+        return {"report": report}
 
     except Exception as e:
-        return f"Error generating report with Groq: {str(e)}"
+        print(f"Error in synthesis: {e}")
+        return {"report": f"Error generating report with Groq: {str(e)}"}
