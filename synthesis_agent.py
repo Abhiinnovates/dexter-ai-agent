@@ -97,7 +97,7 @@ def synthesize_research(state: dict):
     Write the SINGLE comprehensive report now:
     """
 
-    try:
+try:
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
@@ -110,9 +110,21 @@ def synthesize_research(state: dict):
             temperature=0.3, 
         )
         
-        # Return the generated text securely back to LangGraph's memory
-        report = response.choices[0].message.content
-        return {"report": report}
+        # 1. Get the raw text from the AI
+        raw_report = response.choices[0].message.content
+        
+        # 2. THE GUILLOTINE: If it printed the header more than once, chop it!
+        header = "### 🏢 1. Company Overview & History"
+        if raw_report.count(header) > 1:
+            print("AI tried to print twice! Chopping the duplicate...")
+            # Split the text at the header, keep the first real section, and put the header back on top
+            chunks = raw_report.split(header)
+            final_report = header + chunks[1]
+        else:
+            final_report = raw_report
+
+        # 3. Return the perfectly cleaned single report
+        return {"report": final_report}
 
     except Exception as e:
         print(f"Error in synthesis: {e}")
