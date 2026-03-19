@@ -78,18 +78,13 @@ def research_node(state: ResearchState):
 
 
 def synthesize_node(state: dict):
-    print("--- SYNTHESIZING REPORT ---")
-
-    # Grab the full history and the newly gathered data
-    history = state.get("chat_history", state.get("question", ""))
-    data = state.get("research_data", {})
-
-    # Pass them both to your Groq report writer
+    print("--- ROUTING TO SYNTHESIS ---")
+    
+    # We now just pass the entire LangGraph state directly to the agent!
     from synthesis_agent import synthesize_research
-
-    final_report = synthesize_research(history, data)
-
-    return {"report": final_report}
+    result = synthesize_research(state)
+    
+    return result
 
 
 def critic_node(state: ResearchState):
